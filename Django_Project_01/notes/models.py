@@ -17,7 +17,7 @@ class Note(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     # auto_now_add=True автоматически добавляет текущую дату и время.
 
-#    image = models.FileField(upload_to=upload_to, null=True)  # TODO: ImageField
+#    image = models.FileField(upload_to=upload_to, null=True)
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     # `on_delete=models.CASCADE`

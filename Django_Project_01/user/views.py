@@ -1,3 +1,44 @@
 from django.shortcuts import render
+from django.urls import reverse
+from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.core.handlers.wsgi import WSGIRequest
 
-# Create your views here.
+from .models import User
+
+
+def register(request: WSGIRequest):
+    if request.method != "POST":
+        return render(request, "registration/register.html")
+    if not request.POST.get("username") or not request.POST.get("email") or not request.POST.get("password1"):
+        return render(
+            request,
+            "registration/register.html",
+            {"errors": "Укажите все поля!"}
+        )
+    # Если уже есть такой пользователь с username или email.
+    if User.objects.filter(
+            Q(username=request.POST["username"]) | Q(email=request.POST["email"])
+    ).count() > 0:
+        return render(
+            request,
+            "registration/register.html",
+            {"errors": "Если уже есть такой пользователь с username или email"}
+        )
+
+    # Сравниваем два пароля!
+    if request.POST.get("password1") != request.POST.get("password2"):
+        return render(
+            request,
+            "registration/register.html",
+            {"errors": "Пароли не совпадают"}
+        )
+
+    # Создадим учетную запись пользователя.
+    # Пароль надо хранить в БД в шифрованном виде.
+    User.objects.create_user(
+        username=request.POST["username"],
+        email=request.POST["email"],
+        password=request.POST["password1"]
+    )
+    return HttpResponseRedirect(reverse('home'))
