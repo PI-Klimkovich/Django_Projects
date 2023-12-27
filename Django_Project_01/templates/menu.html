@@ -1,33 +1,4 @@
-
-  <header class="p-3 text-bg-dark">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Бутстрап"><use xlink:href="#bootstrap"></use></svg>
-        </a>
-
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="{% url 'home' %}" class="nav-link px-2 text-secondary"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Дом</font></font></a></li>
-          <li><a href="{% url 'about' %}" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">О приложении</font></font></a></li>
-          <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Цены</font></font></a></li>
-          <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Часто</font></font></a></li>
-          <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ООО</font></font></a></li>
-        </ul>
-
-        <form class="d-flex" role="search">
-          <input name="search" value="{{ search_value_form }}"
-                 class="form-control me-2 text-bg-dark" type="search" placeholder="Поиск..." aria-label="Поиск">
-          <button class="btn btn-outline-success me-2" type="submit">Поиск</button>
-        </form>
-
-        <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Зарегистрироваться</font></font></button>
-          <button type="button" class="btn btn-warning"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Войти</font></font></button>
-        </div>
-      </div>
-    </div>
-  </header>
-
+{% if user.is_authenticated %}
 
   <header class="p-3 mb-3 border-bottom">
     <div class="container">
@@ -52,14 +23,48 @@
 
         <div class="d-flex gap-2 justify-content-center me-2">
           <span class="badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-pill">
-            <img class="rounded-circle me-1" width="24" height="24" src="https://github.com/mdo.png" alt="">Незнакомец
+            <img class="rounded-circle me-1" width="24" height="24" src="https://github.com/mdo.png" alt="">{{ user }}
           </span>
         </div>
 
-        <div class="text-end">
-          <button type="button" class="btn btn-warning"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Выйти</font></font></button>
-        </div>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button class="btn btn-warning" type="submit">Выйти</button>
+        </form>
 
       </div>
     </div>
   </header>
+
+{% else %}
+
+  <header class="p-3 text-bg-dark">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Бутстрап"><use xlink:href="#bootstrap"></use></svg>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="{% url 'home' %}" class="nav-link px-2 text-secondary"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Дом</font></font></a></li>
+          <li><a href="{% url 'about' %}" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">О приложении</font></font></a></li>
+          <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Цены</font></font></a></li>
+          <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Часто</font></font></a></li>
+          <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ООО</font></font></a></li>
+        </ul>
+
+        <form class="d-flex" role="search">
+          <input name="search" value="{{ search_value_form }}"
+                 class="form-control me-2 text-bg-dark" type="search" placeholder="Поиск..." aria-label="Поиск">
+          <button class="btn btn-outline-success me-2" type="submit">Поиск</button>
+        </form>
+
+        <div class="text-end">
+          <a class="btn btn-outline-light" href="{% url 'register' %}" role="button">Зарегистрироваться</a>
+          <a class="btn btn-warning" href="{% url 'login' %}" role="button">Войти</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+{% endif %}

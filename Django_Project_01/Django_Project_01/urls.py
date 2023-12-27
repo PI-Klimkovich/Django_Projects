@@ -33,6 +33,6 @@ urlpatterns = [
     path('', home_page_view, name='home'),
     path('about', about_view, name='about'),
 
-    # path('', include("user.urls")),
-    # path('', include("notes.urls")),
+    path('user/', include("user.urls")),
+    path('note/', include("notes.urls")),
 ]

@@ -41,4 +41,8 @@ def register(request: WSGIRequest):
         email=request.POST["email"],
         password=request.POST["password1"]
     )
-    return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse('reg_ok'))
+
+
+def about_registration(request):
+    return render(request, "user/reg_ok.html")
