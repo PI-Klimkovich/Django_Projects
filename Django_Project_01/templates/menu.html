@@ -8,11 +8,10 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Дом</font></font></a></li>
-          <li><a href="{% url 'about' %}" class="nav-link px-2 link-body-emphasis"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">О приложении</font></font></a></li>
-          <li><a href="#" class="nav-link px-2 link-body-emphasis"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Цены</font></font></a></li>
-          <li><a href="#" class="nav-link px-2 link-body-emphasis"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Часто</font></font></a></li>
-          <li><a href="#" class="nav-link px-2 link-body-emphasis"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ООО</font></font></a></li>
+          <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary">Дом</a></li>
+          <li><a href="{% url 'about' %}" class="nav-link px-2 link-body-emphasis">О приложении</a></li>
+          <li><a href="#" class="nav-link px-2 link-body-emphasis">Цены</a></li>
+          <li><a href="#" class="nav-link px-2 link-body-emphasis">Часто</a></li>
         </ul>
 
         <form class="d-flex" role="search">
@@ -27,6 +26,9 @@
           </span>
         </div>
 
+        <div class="text-end">
+          <a class="btn btn-info me-2" href="{% url 'home' %}" role="button">Мои заметки</a>
+        </div>
         <form action="{% url 'logout' %}" method="post">
           {% csrf_token %}
           <button class="btn btn-warning" type="submit">Выйти</button>
@@ -46,11 +48,10 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="{% url 'home' %}" class="nav-link px-2 text-secondary"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Дом</font></font></a></li>
-          <li><a href="{% url 'about' %}" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">О приложении</font></font></a></li>
-          <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Цены</font></font></a></li>
-          <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Часто</font></font></a></li>
-          <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ООО</font></font></a></li>
+          <li><a href="{% url 'home' %}" class="nav-link px-2 text-secondary">Дом</a></li>
+          <li><a href="{% url 'about' %}" class="nav-link px-2 text-white">О приложении</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">Цены</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">Часто</a></li>
         </ul>
 
         <form class="d-flex" role="search">

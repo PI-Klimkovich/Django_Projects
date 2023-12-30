@@ -16,15 +16,25 @@ def register(request: WSGIRequest):
             "registration/register.html",
             {"errors": "Укажите все поля!"}
         )
+
     # Если уже есть такой пользователь с username или email.
-    if User.objects.filter(
-            Q(username=request.POST["username"]) | Q(email=request.POST["email"])
-    ).count() > 0:
+    # if User.objects.filter(
+    #         Q(username=request.POST["username"]) | Q(email=request.POST["email"])
+    # ).count() > 0:
+    #     return render(
+    #         request,
+    #         "registration/register.html",
+    #         {"errors": "Пользователь с username или email уже зарегистрирован"}
+    #     )
+
+    # Если есть пользователь с таким username.
+    if User.objects.filter(Q(username=request.POST["username"])).count() > 0:
         return render(
             request,
             "registration/register.html",
-            {"errors": "Если уже есть такой пользователь с username или email"}
+            {"errors": f"Пользователь с username '{request.POST.get('username')}' уже зарегистрирован"}
         )
+
 
     # Сравниваем два пароля!
     if request.POST.get("password1") != request.POST.get("password2"):

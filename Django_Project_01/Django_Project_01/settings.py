@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'notes',
+    'notes.apps.NotesConfig',
     'user'
 ]
 
@@ -127,6 +127,13 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+# ============== Media =================
+MEDIA_ROOT = BASE_DIR / 'media'  # Корень для сохранения медиа файлов.
+# Префикс, по которому Django понимает,
+# что данный URL необходимо рассматривать как файл в папке с медиа.
+MEDIA_URL = 'media/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Create note
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+	<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal text-body-emphasis">Создайте заметку</h1>
+    </div>
+
+    <form action="{% url 'create' %}" method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">Заголовок</label>
+          <input name="title" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Заголовок Вашей заметки" value="{{ note.title }}">
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">Анонс</label>
+          <input name="anons" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Краткое описание заметки" value="{{ note.anons }}">
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">Содержимое</label>
+          <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="8" placeholder="Разместите текст Вашей заметки">{{ note.content }}</textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">Картинка</label><br>
+          <input name="noteImage" type="file" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+
+        <!-- Блок кнопки -->
+        <button type="submit" class="btn btn-outline-primary">Отправить</button>
+
+    </form>
+
+</div>
+{% endblock %}

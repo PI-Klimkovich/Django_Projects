@@ -3,9 +3,13 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-  <div>
-      {{ errors }}
-  </div>
+
+  {% if form.errors %}
+    <div class="alert alert-danger">
+      Имя пользователя или пароль введены некорректно. Пожалуйста, попробуйте еще раз...
+    </div>
+  {% endif %}
+
   <div class="container py-5" style="width: 350px">
     <form action="{% url 'login' %}" method="post">
       {% csrf_token %}
