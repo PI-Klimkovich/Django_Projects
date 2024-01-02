@@ -11,27 +11,55 @@
   <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
     <h1 class="display-4 fw-normal text-body-emphasis">Простое web-приложение</h1>
     <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+
       <div class="col-lg-6">
         <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Создавайте свои заметки на нашем ресурсе</h1>
         <p class="lead">Создавайте свои заметки на нашем ресурсе</p>
         <h1 class="display-5 fw-bold text-body-emphasis lh-1">Create your notes</h1>
         <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">on our website</h1>
         <p class="lead">Create your notes on our website</p>
+        {% if user.is_authenticated %}
+          <a href="{% url 'create' %}" class="btn btn-outline-success btn-lg px-4 me-md-2">Создать заметку</a>
+        {% endif %}
       </div>
+
       <div class="col-10 col-sm-8 col-lg-6">
         <img src="{% static 'img/welcome.jpg' %}"
              class="d-block mx-lg-auto img-fluid rounded-3" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
       </div>
+
+
     </div>
   </div>
 </div>
 
 <div class='container'>
-	<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-      <h1 class="display-4 fw-normal text-body-emphasis">Заметки наших пользователей</h1>
-    </div>
+  <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+    <h1 class="display-4 fw-normal text-body-emphasis">Заметки наших пользователей</h1>
+  </div>
 
+  {% if notes|length > 0 %}
+    {% for note in notes %}
+      <div class="alert alert-info">
+        <h2>
+          <a class="text-dark text-decoration-none" href="{% url 'note' note.uuid %}">{{ note.title }}</a>
+        </h2>
+        <p>{{ note.anons }}</p>
+        <p class="card-text my-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+            <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+          </svg>
+          {{ note.created_at }}
+        </p>
+        <p>Автор:
+          <a class="text-dark text-decoration-none" href="{% url 'note' note.uuid %}">{{ note.user }}</a>
+        </p>
+      </div>
+    {% endfor %}
+  {% else %}
     <p>У нас пока нет заметок. Разместите первую.</p>
-</div>
+  {% endif %}
 
+</div>
 {% endblock %}

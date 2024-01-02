@@ -21,6 +21,7 @@ class Note(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     # auto_now_add=True автоматически добавляет текущую дату и время.
+    mod_time = models.DateTimeField(null=True, blank=True)
 
     # image = models.FileField(upload_to=upload_to, null=True)
     image = models.ImageField(upload_to=upload_to, null=True, blank=True, verbose_name="Превью")

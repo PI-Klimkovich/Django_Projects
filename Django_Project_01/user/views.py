@@ -35,7 +35,6 @@ def register(request: WSGIRequest):
             {"errors": f"Пользователь с username '{request.POST.get('username')}' уже зарегистрирован"}
         )
 
-
     # Сравниваем два пароля!
     if request.POST.get("password1") != request.POST.get("password2"):
         return render(
