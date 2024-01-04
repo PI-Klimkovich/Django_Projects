@@ -22,12 +22,12 @@
 
       <div class="mb-3">
         <label for="exampleFormControlInput1" class="form-label">Анонс</label>
-        <input name="anons" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Краткое описание заметки" value="{{ note.anons }}">
+        <input name="anons" type="text" class="form-control" id="exampleFormControlInput1" value="{{ note.anons }}">
       </div>
 
       <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Содержимое</label>
-        <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="8" placeholder="Разместите текст Вашей заметки">{{ note.content }}</textarea>
+        <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="8">{{ note.content }}</textarea>
       </div>
 
       <div class="mb-3">

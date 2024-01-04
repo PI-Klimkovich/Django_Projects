@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.conf import settings
 
 import os
+import shutil
 
 from .models import Note
 
@@ -57,21 +58,25 @@ def show_note_view(request: WSGIRequest, note_uuid):
 
 def delete_note_view(request: WSGIRequest, note_uuid: str):
     if request.method == "POST":
-        Note.objects.filter(uuid=note_uuid).delete()
+        # Note.objects.get(uuid=note_uuid).image.delete(save=True)
+        # Note.objects.get(uuid=note_uuid).delete()
+        # os.rmdir(image_path)
+        image_path = os.path.join(settings.MEDIA_ROOT, note_uuid)
+        shutil.rmtree(image_path)
     return HttpResponseRedirect(reverse("home"))
 
 
 def update_note_view(request: WSGIRequest, note_uuid):
     if request.method == "POST":
         note = Note.objects.get(uuid=note_uuid)
-        new_image = request.FILES.get("image")
+        new_image = request.FILES.get("noteImage")
         if new_image:
             # Удаление старого изображения
             if note.image:
                 old_image_path = os.path.join(settings.MEDIA_ROOT, note.image.name)
                 if os.path.isfile(old_image_path):
                     os.remove(old_image_path)
-        note.image = new_image
+            note.image = new_image
         note.title = request.POST.get('title', note.title)
         note.anons = request.POST.get('anons', note.anons)
         note.content = request.POST.get('content', note.content)
