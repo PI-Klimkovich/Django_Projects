@@ -1,23 +1,17 @@
 {% extends 'base.html' %}
 
 {% block title %}
-	Заметки пользователя
+	Ваши заметки
 {% endblock %}
 
 {% block content %}
   <div class='container'>
-    {% if user.is_authenticated and username == user.username %}
-      <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-        <h1 class="display-4 fw-normal text-body-emphasis">Ваши заметки</h1>
-        <div class="pricing-header pb-md-4 mx-auto text-center">
-          <a href="{% url 'create' %}" class="btn btn-outline-success btn-lg px-4 me-md-2">Создать заметку</a>
-        </div>
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal text-body-emphasis">Ваши заметки</h1>
+      <div class="pricing-header pb-md-4 mx-auto text-center">
+        <a href="{% url 'create' %}" class="btn btn-outline-success btn-lg px-4 me-md-2">Создать заметку</a>
       </div>
-    {% else %}
-      <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-        <h1 class="display-4 fw-normal text-body-emphasis">Заметки пользователя "{{ username }}"</h1>
-      </div>
-    {% endif %}
+    </div>
 
     {% if notes|length > 0 %}
       {% for note in notes %}
@@ -36,7 +30,7 @@
         </div>
       {% endfor %}
     {% else %}
-      <p>У нас пока нет заметок. Разместите первую.</p>
+      <p>У Вас пока нет заметок. Разместите первую.</p>
     {% endif %}
 
   </div>

@@ -10,6 +10,7 @@ import os
 import shutil
 
 from .models import Note
+from user.models import User
 
 
 def home_page_view(request):
@@ -48,7 +49,6 @@ def create_note_view(request: WSGIRequest):
 def show_note_view(request: WSGIRequest, note_uuid):
     try:
         note = Note.objects.get(uuid=note_uuid)  # Получение только ОДНОЙ записи.
-
     except Note.DoesNotExist:
         # Если не найдено такой записи.
         raise Http404
@@ -58,8 +58,8 @@ def show_note_view(request: WSGIRequest, note_uuid):
 
 def delete_note_view(request: WSGIRequest, note_uuid: str):
     if request.method == "POST":
-        # Note.objects.get(uuid=note_uuid).image.delete(save=True)
-        # Note.objects.get(uuid=note_uuid).delete()
+        Note.objects.get(uuid=note_uuid).image.delete(save=True)
+        Note.objects.get(uuid=note_uuid).delete()
         # os.rmdir(image_path)
         image_path = os.path.join(settings.MEDIA_ROOT, note_uuid)
         shutil.rmtree(image_path)
@@ -86,3 +86,29 @@ def update_note_view(request: WSGIRequest, note_uuid):
         # return HttpResponseRedirect(reverse('note', args=[note.uuid]))
     note = Note.objects.get(uuid=note_uuid)
     return render(request, "note/update_note.html", {"note": note})
+
+
+# заметки выбранного пользователя
+def user_notes_view(request: WSGIRequest, username):
+    user = User.objects.get(username=username)
+    user_notes = Note.objects.filter(user=user)
+    print(username)
+    return render(request, 'note/user_notes.html', {"notes": user_notes, "username": username})
+
+
+# заметки авторизованного пользователя
+@login_required()
+def your_notes_view(request: WSGIRequest, username):
+    user = User.objects.get(username=username)
+    user_notes = Note.objects.filter(user=user)
+    print(username)
+    return render(request, 'note/your_notes.html', {"notes": user_notes, "username": username})
+
+
+def show_your_note_view(request: WSGIRequest, note_uuid):
+    try:
+        note = Note.objects.get(uuid=note_uuid)  # Получение только ОДНОЙ записи.
+    except Note.DoesNotExist:
+        # Если не найдено такой записи.
+        raise Http404
+    return render(request, "note/your_note.html", {"note": note})

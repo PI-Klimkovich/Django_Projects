@@ -13,13 +13,22 @@
     <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
 
       <div class="col-lg-6">
-        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Создавайте свои заметки на нашем ресурсе</h1>
-        <p class="lead">Создавайте свои заметки на нашем ресурсе</p>
-        <h1 class="display-5 fw-bold text-body-emphasis lh-1">Create your notes</h1>
-        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">on our website</h1>
-        <p class="lead">Create your notes on our website</p>
         {% if user.is_authenticated %}
-          <a href="{% url 'create' %}" class="btn btn-outline-success btn-lg px-4 me-md-2">Создать заметку</a>
+          <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Создавайте свои заметки на нашем ресурсе</h1>
+          <p class="lead">Приветствуем Вас | Вы авторизовались</p>
+          <p class="lead">Теперь Вам доступны неограниченные возможности приложения</p>
+          <h1 class="display-5 fw-bold text-body-emphasis lh-1">Create your notes</h1>
+          <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">on our website</h1>
+          <p class="lead">Welcome | You are logged in</p>
+          <p class="lead">Now you have access to unlimited application capabilities</p>
+          <a href="{% url 'create' %}" class="btn btn-outline-success btn-lg px-4 me-md-2">Создать заметку | Create a note</a>
+        {% else %}
+          <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Создавайте свои заметки на нашем ресурсе</h1>
+          <p class="lead">Для полноценного использования приложения</p>
+          <p class="lead">Вам необходимо зарегистрироваться</p>
+          <h1 class="display-5 fw-bold text-body-emphasis lh-1">Create your notes</h1>
+          <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">on our website</h1>
+          <p class="lead">To fully use the application you need to register</p>
         {% endif %}
       </div>
 
@@ -53,7 +62,7 @@
           {{ note.created_at }}
         </p>
         <p>Автор:
-          <a class="text-dark text-decoration-none" href="{% url 'note' note.uuid %}">{{ note.user }}</a>
+          <a class="text-dark text-decoration-none" href="{% url 'user_notes' note.user %}">{{ note.user }}</a>
         </p>
       </div>
     {% endfor %}

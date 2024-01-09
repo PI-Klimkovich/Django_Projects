@@ -27,7 +27,7 @@
         </div>
 
         <div class="text-end">
-          <a class="btn btn-info me-2" href="{% url 'home' %}" role="button">Мои заметки</a>
+          <a class="btn btn-info me-2" href="{% url 'your_notes' user %}" role="button">Мои заметки</a>
         </div>
         <form action="{% url 'logout' %}" method="post">
           {% csrf_token %}
