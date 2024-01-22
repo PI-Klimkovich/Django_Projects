@@ -17,7 +17,7 @@ from user.models import User
 def home_page_view(request):
     all_notes = Note.objects.all()  # Получение всех записей из таблицы этой модели.
     context: dict = {
-        "notes": all_notes
+        "notes": all_notes[:20]
     }
     return render(request, "home.html", context)
 
@@ -102,7 +102,7 @@ def user_notes_view(request: WSGIRequest, username):
 def your_notes_view(request: WSGIRequest, username):
     user = User.objects.get(username=username)
     user_notes = Note.objects.filter(user=user)
-    print(username)
+    # print(username)
     return render(request, 'note/your_notes.html', {"notes": user_notes, "username": username})
 
 
@@ -158,7 +158,7 @@ def filter_notes_view(request: WSGIRequest):
     print(notes_queryset.query)
 
     context: dict = {
-        "notes": notes_queryset,
+        "notes": notes_queryset[:20],
         "search_value_form": search,
     }
     return render(request, "home.html", context)
