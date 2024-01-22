@@ -14,7 +14,7 @@
           <li><a href="#" class="nav-link px-2 link-body-emphasis">Часто</a></li>
         </ul>
 
-        <form class="d-flex" role="search">
+        <form class="d-flex" role="search" action="{% url 'filter-notes' %}">
           <input name="search" value="{{ search_value_form }}"
                  class="form-control me-2" type="search" placeholder="Поиск..." aria-label="Поиск">
           <button class="btn btn-outline-success me-2" type="submit">Поиск</button>
@@ -54,7 +54,7 @@
           <li><a href="#" class="nav-link px-2 text-white">Часто</a></li>
         </ul>
 
-        <form class="d-flex" role="search">
+        <form class="d-flex" role="search" action="{% url 'filter-notes' %}">
           <input name="search" value="{{ search_value_form }}"
                  class="form-control me-2 text-bg-dark" type="search" placeholder="Поиск..." aria-label="Поиск">
           <button class="btn btn-outline-success me-2" type="submit">Поиск</button>

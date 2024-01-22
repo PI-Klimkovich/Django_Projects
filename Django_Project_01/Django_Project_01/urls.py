@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 
-from notes.views import home_page_view, about_view
+from notes.views import home_page_view, about_view, filter_notes_view
 
 from django.conf.urls.static import serve
 from django.conf import settings
@@ -32,6 +32,7 @@ urlpatterns = [
 
     path('', home_page_view, name='home'),
     path('about', about_view, name='about'),
+    path("filter", filter_notes_view, name="filter-notes"),
 
     path('user/', include("user.urls")),
     path('note/', include("notes.urls")),
