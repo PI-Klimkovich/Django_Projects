@@ -49,7 +49,8 @@ def register(request: WSGIRequest):
     User.objects.create_user(
         username=request.POST["username"],
         email=request.POST["email"],
-        password=request.POST["password1"]
+        password=request.POST["password1"],
+        country=request.POST["country"],
     )
     return HttpResponseRedirect(reverse('reg_ok'))
 
