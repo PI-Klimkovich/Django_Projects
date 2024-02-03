@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.db.models import Q
+from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.core.handlers.wsgi import WSGIRequest
 
 from .models import User
-
+from notes.models import Note
 
 def register(request: WSGIRequest):
     if request.method != "POST":
@@ -55,3 +56,14 @@ def register(request: WSGIRequest):
 
 def about_registration(request):
     return render(request, "user/reg_ok.html")
+
+
+def show_user_view(request):
+    all_users = (User.objects.annotate(notes_num=Count('note__user'))
+          .values('id', "username", "last_login", "country", "notes_num")
+          .order_by('username'))
+    print(all_users)
+    context: dict = {
+        "users": all_users,
+    }
+    return render(request, "user/users.html", context)

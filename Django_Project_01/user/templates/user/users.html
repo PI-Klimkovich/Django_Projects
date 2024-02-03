@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Наши авторы
+{% endblock %}
+
+{% block content %}
+  <div class='container'>
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal text-body-emphasis">Наши авторы</h1>
+    </div>
+
+    {% if users|length > 0 %}
+      {% for user in users %}
+        <div class="alert alert-info">
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 mb-md-0">
+            <li class="col-lg-3">
+              <h4 class="mb-0"><a class="nav-link px-2 link-body-emphasis">{{ user.username }}</a></h4>
+              {% if user.country %}
+                <a class="nav-link px-2 link-body-emphasis">Локация: {{ user.country.upper }}</a>
+              {% else %}
+                <a class="nav-link px-2 link-body-emphasis">Локация: не указана</a>
+              {% endif %}
+            </li>
+            <li>
+              <a class="nav-link link-body-emphasis"><b>Активность:</b></a>
+            </li>
+            <li>
+              {% if user.last_login %}
+                <a class="nav-link link-body-emphasis" href="{% url 'user_notes' user.username %}"><p class="col-md-auto mb-0">- <i>Заметок:</i> {{ user.notes_num }}</p></a>
+                <a class="nav-link link-body-emphasis"><p class="col-md-auto mb-0">- <i>Последний визит:</i> {{ user.last_login }}</p></a>
+              {% else %}
+                <a class="nav-link link-body-emphasis"><p class="col-md-auto mb-0">- <i>К сожалению, не активен!</i></p></a>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>У нас пока нет пользователей. Вы можете стать первым.</p>
+    {% endif %}
+
+  </div>
+{% endblock %}
