@@ -11,7 +11,7 @@
           <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary">Дом</a></li>
           <li><a href="{% url 'about' %}" class="nav-link px-2 link-body-emphasis">О приложении</a></li>
           <li><a href="{% url 'all_users' %}" class="nav-link px-2 link-body-emphasis">Авторы</a></li>
-          <li><a href="#" class="nav-link px-2 link-body-emphasis">Часто</a></li>
+          <li><a href="{% url 'all_tags' %}" class="nav-link px-2 link-body-emphasis">Теги</a></li>
         </ul>
 
         <form class="d-flex" role="search" action="{% url 'filter-notes' %}">
@@ -51,7 +51,7 @@
           <li><a href="{% url 'home' %}" class="nav-link px-2 text-secondary">Дом</a></li>
           <li><a href="{% url 'about' %}" class="nav-link px-2 text-white">О приложении</a></li>
           <li><a href="{% url 'all_users' %}" class="nav-link px-2 text-white">Авторы</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">Часто</a></li>
+          <li><a href="{% url 'all_tags' %}" class="nav-link px-2 text-white">Теги</a></li>
         </ul>
 
         <form class="d-flex" role="search" action="{% url 'filter-notes' %}">

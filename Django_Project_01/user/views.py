@@ -61,9 +61,9 @@ def about_registration(request):
 
 def show_user_view(request):
     all_users = (User.objects.annotate(notes_num=Count('note__user'))
-          .values('id', "username", "last_login", "country", "notes_num")
+          .values("username", "last_login", "country", "notes_num")
           .order_by('username'))
-    print(all_users)
+    # print(all_users)
     context: dict = {
         "users": all_users,
     }

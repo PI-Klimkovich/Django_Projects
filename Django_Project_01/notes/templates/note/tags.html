@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Теги
+{% endblock %}
+
+{% block content %}
+  <div class='container'>
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal text-body-emphasis">Перечень тегов</h1>
+    </div>
+
+    {% if tags|length > 0 %}
+      {% for tag in tags %}
+      <div class="col">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center py-2">
+              <span>{{ tag }}</span>
+            </div>
+            <div class="pb-3">
+              <span class="badge text-bg-info">{{ tag }}</span>
+            </div>
+            <p class="card-text">{{ tag }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p>У нас пока нет тегов. Вы можете определить первый.</p>
+    {% endif %}
+
+  </div>
+{% endblock %}

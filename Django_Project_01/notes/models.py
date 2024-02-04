@@ -2,11 +2,13 @@ import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 
-import pathlib
-from django.conf import settings
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
-from django.contrib.auth.models import AbstractUser
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    objects = models.Manager()  # Он подключается к базе.
+
+    def __str__(self):
+        return self.name
 
 
 def upload_to(instance: "Note", filename: str) -> str:
@@ -25,6 +27,8 @@ class Note(models.Model):
 
     # image = models.FileField(upload_to=upload_to, null=True)
     image = models.ImageField(upload_to=upload_to, null=True, blank=True, verbose_name="Превью")
+
+    tags = models.ManyToManyField(Tag, related_name="notes", verbose_name="Теги")
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     # `on_delete=models.CASCADE`

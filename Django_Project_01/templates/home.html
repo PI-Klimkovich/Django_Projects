@@ -61,6 +61,16 @@
           </svg>
           {{ note.created_at }}
         </p>
+
+        <div>
+          {# Если у заметки нет тегов, то все равно будет список, в котором имеется лишь один None, не учитываем такое #}
+          {% if note.tag_names.0 != None %}
+            {% for tag in note.tag_names %}
+              <span class="me-2 badge text-bg-primary">{{ tag }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+
         <p>Автор:
           <a class="text-dark text-decoration-none" href="{% url 'user_notes' note.user %}">{{ note.user }}</a>
         </p>

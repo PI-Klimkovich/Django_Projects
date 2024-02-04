@@ -9,4 +9,5 @@ urlpatterns = [
     path("<note_uuid>/delete", views.delete_note_view, name="delete"),
     path("<username>/notes", views.user_notes_view, name="user_notes"),
     path("<username>/u_notes", views.your_notes_view, name="your_notes"),
+    path('tags', views.show_tags_view, name='all_tags'),
 ]

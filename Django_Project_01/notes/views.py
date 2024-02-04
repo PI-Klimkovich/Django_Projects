@@ -1,21 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.handlers.wsgi import WSGIRequest
 from django.urls import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, F
 
 import os
 import shutil
 
-from .models import Note
+from .models import Note, Tag
 from user.models import User
 
 
 def home_page_view(request):
-    all_notes = Note.objects.all()  # Получение всех записей из таблицы этой модели.
+    # all_notes = Note.objects.all()  # Получение всех записей из таблицы этой модели.
+    all_notes = (Note.objects.all()
+                 .select_related("user")  # Вытягивание связанных данных из таблицы User в один запрос
+                 .prefetch_related("tags")  # Вытягивание связанных данных из таблицы Tag в отдельные запросы
+                 # .values("uuid", "title", "created_at", "user", "tags")  # Выбор только указанных полей
+                 .order_by("-created_at")  # Сортировка результатов по убыванию по полю created_at
+                 )
+    queryset = Tag.objects.all()
+    print(all_notes[1].tags, queryset)
     context: dict = {
         "notes": all_notes[:20]
     }
@@ -40,6 +48,18 @@ def create_note_view(request: WSGIRequest):
             image=request.FILES.get("noteImage"),
             user=request.user,
         )
+
+        # Если нет тегов, то будет пустой список
+        tags_names: list[str] = request.POST.get("tags", "").split(",")
+        tags_names = list(map(str.strip, tags_names))  # Убираем лишние пробелы
+
+        tags_objects: list[Tag] = []
+        for tag in tags_names:
+            tag_obj, created = Tag.objects.get_or_create(name=tag)
+            tags_objects.append(tag_obj)
+
+        note.tags.set(tags_objects)  # `set` это переопределение всех тегов для заметки.
+
         return render(request, "note/create_ok.html", {"note": note})
         # return HttpResponseRedirect(reverse('note', args=[note.uuid]))
 
@@ -57,7 +77,12 @@ def show_note_view(request: WSGIRequest, note_uuid):
     return render(request, "note/note.html", {"note": note})
 
 
+@login_required
 def delete_note_view(request: WSGIRequest, note_uuid: str):
+    note = get_object_or_404(Note, id=note_uuid)
+    if note.user != request.user:
+        return HttpResponseForbidden("У Вас нет разрешения на удаление объекта")
+
     if request.method == "POST":
         Note.objects.get(uuid=note_uuid).image.delete(save=True)
         Note.objects.get(uuid=note_uuid).delete()
@@ -67,7 +92,12 @@ def delete_note_view(request: WSGIRequest, note_uuid: str):
     return HttpResponseRedirect(reverse("home"))
 
 
+@login_required
 def update_note_view(request: WSGIRequest, note_uuid):
+    note = get_object_or_404(Note, id=note_uuid)
+    if note.user != request.user:
+        return HttpResponseForbidden("У Вас нет разрешения на редактирование объекта")
+
     if request.method == "POST":
         note = Note.objects.get(uuid=note_uuid)
         new_image = request.FILES.get("noteImage")
@@ -162,3 +192,12 @@ def filter_notes_view(request: WSGIRequest):
         "search_value_form": search,
     }
     return render(request, "home.html", context)
+
+
+def show_tags_view(request):
+    all_tags = Tag.objects.order_by('name')
+    print(all_tags)
+    context: dict = {
+        "tags": all_tags,
+    }
+    return render(request, "home.html")
