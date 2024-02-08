@@ -12,14 +12,12 @@
 
     {% if tags|length > 0 %}
       {% for tag in tags %}
-      <div class="col">
-        <div class="card shadow-sm">
-          <div class="card-body">
-{{ tag }}
-          </div>
+        <div class="d-flex align-items-center py-1">
+          <h5>
+            <a class="nav-link link-body-emphasis badge text-bg-info" href="{% url 'user_notes' user.username %}">{{ tag }}</a>
+          </h5>
         </div>
-      </div>
-      {% endfor %}
+       {% endfor %}
     {% else %}
       <p>У нас пока нет тегов. Вы можете определить первый.</p>
     {% endif %}

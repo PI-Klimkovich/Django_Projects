@@ -19,11 +19,23 @@ def home_page_view(request):
     all_notes = (Note.objects.all()
                  .select_related("user")  # Вытягивание связанных данных из таблицы User в один запрос
                  .prefetch_related("tags")  # Вытягивание связанных данных из таблицы Tag в отдельные запросы
+                 .annotate(
+                     # Создание нового вычисляемого поля username из связанной таблицы User
+                     username=F('user__username'),
+
+                     # courses=Course.objects.filter(id__in=course_ids)
+                     # student.courses.set(courses, through_defaults={"date": date.today(), "mark":0})
+
+                     # Создание массива уникальных имен тегов для каждой заметки
+                     # tag_names=ArrayAgg('tags__name', distinct=True)
+                 )
                  # .values("uuid", "title", "created_at", "user", "tags")  # Выбор только указанных полей
+                 .distinct()  # Убирание дубликатов, если они есть
                  .order_by("-created_at")  # Сортировка результатов по убыванию по полю created_at
                  )
-    queryset = Tag.objects.all()
-    print(all_notes[1].tags, queryset)
+
+    queryset = Tag.objects.all().order_by().values_list()
+    print(all_notes.values_list())
     context: dict = {
         "notes": all_notes[:20]
     }
@@ -195,9 +207,12 @@ def filter_notes_view(request: WSGIRequest):
 
 
 def show_tags_view(request):
-    all_tags = Tag.objects.order_by('name')
-    print(all_tags)
+    all_tags = Tag.objects.all().order_by('name')
+    # получим все курсы студента
+    # courses = Student.objects.get(name="Tom").courses.all()
+    tags_ss = Note.objects.all().values_list()
+    print(tags_ss)
     context: dict = {
         "tags": all_tags,
     }
-    return render(request, "home.html")
+    return render(request, "note/tags.html", context)

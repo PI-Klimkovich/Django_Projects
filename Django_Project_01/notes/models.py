@@ -18,9 +18,9 @@ def upload_to(instance: "Note", filename: str) -> str:
 
 class Note(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=255)
-    anons = models.CharField(max_length=255)
-    content = models.TextField()
+    title = models.CharField(max_length=255, verbose_name="Заголовок", help_text="Не более 255 символов")
+    anons = models.CharField(max_length=255, verbose_name="Анонс", help_text="Не более 255 символов")
+    content = models.TextField(verbose_name="Содержание заметки")
     created_at = models.DateTimeField(auto_now_add=True)
     # auto_now_add=True автоматически добавляет текущую дату и время.
     mod_time = models.DateTimeField(null=True, blank=True)
@@ -30,7 +30,7 @@ class Note(models.Model):
 
     tags = models.ManyToManyField(Tag, related_name="notes", verbose_name="Теги")
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name="Владелец")
     # `on_delete=models.CASCADE`
     # При удалении пользователя, удалятся все его записи.
 
