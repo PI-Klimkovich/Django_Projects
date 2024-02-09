@@ -9,7 +9,7 @@ class CustomUserAdmin(UserAdmin):
 
     list_display = ['username', 'first_name', 'last_name', 'count_note', "is_active"]
     search_fields = ['username', 'first_name']
-    actions = ["lock_user", "unlock_user"]
+    actions = ["block_user", "unlock_user"]
     list_editable = ("is_active",)
 
     @admin.display(description="Counts notes")
@@ -17,7 +17,7 @@ class CustomUserAdmin(UserAdmin):
         return obj.note_set.count()
 
     @admin.action(description='Block User')
-    def lock_user(self, request, queryset):
+    def block_user(self, request, queryset):
         queryset.update(is_active=False)
 
     @admin.action(description='Unlock User')

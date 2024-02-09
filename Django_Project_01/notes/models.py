@@ -23,7 +23,7 @@ class Note(models.Model):
     content = models.TextField(verbose_name="Содержание заметки")
     created_at = models.DateTimeField(auto_now_add=True)
     # auto_now_add=True автоматически добавляет текущую дату и время.
-    mod_time = models.DateTimeField(null=True, blank=True)
+    mod_time = models.DateTimeField(null=True, blank=True, auto_now=True, db_index=True)
 
     # image = models.FileField(upload_to=upload_to, null=True)
     image = models.ImageField(upload_to=upload_to, null=True, blank=True, verbose_name="Превью")
@@ -40,9 +40,11 @@ class Note(models.Model):
 
     class Meta:
         # db_table = 'notes'  # Название таблицы в базе.
-        ordering = ['-created_at']  # Дефис это означает DESC сортировку (обратную).
+        # ordering = ['-created_at']  # Дефис это означает DESC сортировку (обратную).
+        ordering = ['-mod_time']  # Сортировка по умолчанию.
         indexes = [
             models.Index(fields=("created_at",), name="created_at_index"),
+            models.Index(fields=("mod_time",), name="mod_at_index")
         ]
 
     def __str__(self):

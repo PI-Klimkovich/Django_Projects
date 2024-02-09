@@ -8,7 +8,7 @@ from .models import Note, Tag
 
 @admin.register(Note)
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ["preview_image", "title", "created_at", "anons", "short_content", "tags_function"]
+    list_display = ["preview_image", "title", "created_at", "mod_time", "anons", "short_content", "tags_function"]
     search_fields = ["title", "content"]
     date_hierarchy = "created_at"
 
@@ -24,7 +24,7 @@ class NoteAdmin(admin.ModelAdmin):
 
     fieldsets = (
         # 1
-        (None, {"fields": ("title", "user", "preview_image", "image", "tags")}),
+        (None, {"fields": ("title", "anons", "user", "preview_image", "image", "tags")}),
         ("Содержимое", {"fields": ("content",)})
     )
 
