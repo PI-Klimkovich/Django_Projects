@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.db.models import Q
 from django.db.models import Count
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.handlers.wsgi import WSGIRequest
 from django.contrib.auth.decorators import login_required
 
@@ -73,6 +73,11 @@ def show_user_view(request):
 
 @login_required
 def profile_update_view(request: WSGIRequest, username):
+    user = get_object_or_404(User, username=username)
+    if user != request.user:
+        print(user, username, user.username, request.user)
+        return HttpResponseForbidden("У Вас нет разрешения на редактирование объекта")
+
     if request.method == "POST":
         user = User.objects.get(username=username)
         user.first_name = request.POST.get("first_name", user.first_name)
