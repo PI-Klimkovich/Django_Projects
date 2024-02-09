@@ -27,6 +27,10 @@
         </div>
 
         <div class="text-end">
+          <a class="btn btn btn-light me-2" href="{% url 'profile-view' user %}" role="button">Мой профиль</a>
+        </div>
+
+        <div class="text-end">
           <a class="btn btn-info me-2" href="{% url 'your_notes' user %}" role="button">Мои заметки</a>
         </div>
         <form action="{% url 'logout' %}" method="post">

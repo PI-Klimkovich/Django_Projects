@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Update profile
+{% endblock %}
+
+{% block content %}
+  <div class='container'>
+
+	<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal text-body-emphasis">Редактирование Вашего профиля</h1>
+    </div>
+
+    <label for="exampleFormControlInput1" class="form-label">Используемые Вами теги</label>
+    <div class="d-flex align-items-center py-1 mb-3">
+      {% for tag in tags %}
+        <span class="me-2 badge text-bg-primary">{{ tag.name }}</span>
+      {% endfor %}
+    </div>
+
+    <form action="{% url 'profile-view' user.username %}" method="post" enctype="multipart/form-data">
+
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Имя</label>
+        <input name="first_name" type="text" class="form-control" id="exampleFormControlInput1" value="{{ user.first_name }}">
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Фамилия</label>
+        <input name="last_name" type="text" class="form-control" id="exampleFormControlInput1" value="{{ user.last_name }}">
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Страна</label>
+        <input name="country" type="text" class="form-control" id="exampleFormControlInput1" value="{{ user.country }}">
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Телефон</label>
+        <input name="phone" type="text" class="form-control" id="exampleFormControlInput1" value="{{ user.phone }}">
+      </div>
+
+      <button type="submit" class="btn btn-outline-primary">Изменить</button>
+
+    </form>
+
+  </div>
+{% endblock %}

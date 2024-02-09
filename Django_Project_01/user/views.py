@@ -4,9 +4,10 @@ from django.db.models import Q
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.core.handlers.wsgi import WSGIRequest
+from django.contrib.auth.decorators import login_required
 
 from .models import User
-from notes.models import Note
+from notes.models import Tag
 
 def register(request: WSGIRequest):
     if request.method != "POST":
@@ -68,3 +69,18 @@ def show_user_view(request):
         "users": all_users,
     }
     return render(request, "user/users.html", context)
+
+
+@login_required
+def profile_update_view(request: WSGIRequest, username):
+    if request.method == "POST":
+        user = User.objects.get(username=username)
+        user.first_name = request.POST.get("first_name", user.first_name)
+        user.last_name = request.POST.get("last_name", user.last_name)
+        user.phone = request.POST.get("phone", user.phone)
+        user.save()
+        return HttpResponseRedirect("/")
+    user = User.objects.get(username=username)
+    tags_queryset = Tag.objects.filter(notes__user=user).distinct()
+
+    return render(request, 'user/profile.html', {'tags': tags_queryset})
