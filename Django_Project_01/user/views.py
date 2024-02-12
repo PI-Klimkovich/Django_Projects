@@ -71,21 +71,43 @@ def show_user_view(request):
     return render(request, "user/users.html", context)
 
 
+# При условии что (ссылка без username):
+# - в urls.py без /<username> --- строка 8
+# - в menu.html без user --- строка 31
+# - в profile.html без user.username --- строка 22
 @login_required
-def profile_update_view(request: WSGIRequest, username):
-    user = get_object_or_404(User, username=username)
+def profile_update_view(request: WSGIRequest):
+    user = get_object_or_404(User, username=request.user)
+    print(user, user.username, request.user)
     if user != request.user:
-        print(user, username, user.username, request.user)
         return HttpResponseForbidden("У Вас нет разрешения на редактирование объекта")
 
     if request.method == "POST":
-        user = User.objects.get(username=username)
+        user = User.objects.get(username=request.user)
         user.first_name = request.POST.get("first_name", user.first_name)
         user.last_name = request.POST.get("last_name", user.last_name)
         user.phone = request.POST.get("phone", user.phone)
         user.save()
         return HttpResponseRedirect("/")
-    user = User.objects.get(username=username)
     tags_queryset = Tag.objects.filter(notes__user=user).distinct()
 
     return render(request, 'user/profile.html', {'tags': tags_queryset})
+
+# При условии что необходима ссылка с /<username> ---- смотри комментарии выше!!
+# @login_required
+# def profile_update_view(request: WSGIRequest, username):
+#     user = get_object_or_404(User, username=username)
+#     print(user, username, user.username, request.user)
+#     if user != request.user:
+#         return HttpResponseForbidden("У Вас нет разрешения на редактирование объекта")
+#
+#     if request.method == "POST":
+#         user = User.objects.get(username=username)
+#         user.first_name = request.POST.get("first_name", user.first_name)
+#         user.last_name = request.POST.get("last_name", user.last_name)
+#         user.phone = request.POST.get("phone", user.phone)
+#         user.save()
+#         return HttpResponseRedirect("/")
+#     tags_queryset = Tag.objects.filter(notes__user=user).distinct()
+#
+#     return render(request, 'user/profile.html', {'tags': tags_queryset})

@@ -18,7 +18,8 @@
       {% endfor %}
     </div>
 
-    <form action="{% url 'profile-view' user.username %}" method="post" enctype="multipart/form-data">
+    {# <form action="{% url 'profile-view' user.username %}" method="post" enctype="multipart/form-data"> #}
+    <form action="{% url 'profile-view' %}" method="post" enctype="multipart/form-data">
 
       {% csrf_token %}
 
