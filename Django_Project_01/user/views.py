@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from .models import User
 from notes.models import Tag
 
+
 def register(request: WSGIRequest):
     if request.method != "POST":
         return render(request, "registration/register.html")
@@ -88,10 +89,11 @@ def profile_update_view(request: WSGIRequest):
         user.last_name = request.POST.get("last_name", user.last_name)
         user.phone = request.POST.get("phone", user.phone)
         user.save()
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("profile_ok")
     tags_queryset = Tag.objects.filter(notes__user=user).distinct()
 
     return render(request, 'user/profile.html', {'tags': tags_queryset})
+
 
 # При условии что необходима ссылка с /<username> ---- смотри комментарии выше!!
 # @login_required
@@ -111,3 +113,7 @@ def profile_update_view(request: WSGIRequest):
 #     tags_queryset = Tag.objects.filter(notes__user=user).distinct()
 #
 #     return render(request, 'user/profile.html', {'tags': tags_queryset})
+
+
+def about_profile(request):
+    return render(request, "user/profile_ok.html")

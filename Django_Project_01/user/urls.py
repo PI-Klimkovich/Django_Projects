@@ -6,4 +6,5 @@ urlpatterns = [
     path('users', views.show_user_view, name='all_users'),
     # path("profile/<username>", views.profile_update_view, name="profile-view"),
     path("profile", views.profile_update_view, name="profile-view"),
+    path('profile_ok', views.about_profile, name='profile_ok'),
 ]
