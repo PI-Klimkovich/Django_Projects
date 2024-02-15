@@ -14,7 +14,7 @@
       <div class="d-flex align-items-center py-1">
         {% for tag in tags %}
           <h5>
-            <a class="nav-link badge text-bg-primary me-2" href="{% url 'user_notes' user.username %}">{{ tag }}</a>
+            <a class="nav-link badge text-bg-primary me-2" href="{% url 'tag_notes' tag %}">{{ tag }}</a>
           </h5>
         {% endfor %}
       </div>

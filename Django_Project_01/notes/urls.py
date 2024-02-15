@@ -11,4 +11,6 @@ urlpatterns = [
     path("<note_uuid>/delete", views.delete_note_view, name="delete"),
     path("<username>/notes", views.user_notes_view, name="user_notes"),
     path("<username>/u_notes", views.your_notes_view, name="your_notes"),
+    path("<tag>/t_notes", views.tag_notes_view, name="tag_notes"),
+    # path("<tag>", views.tag_notes_view, name="tag_notes"),
 ]

@@ -35,7 +35,7 @@ def home_page_view(request):
                  )
 
     queryset = Tag.objects.all().order_by().values_list()
-    print(all_notes.values_list())
+    # print(all_notes.values_list())
     context: dict = {
         "notes": all_notes[:20]
     }
@@ -135,7 +135,7 @@ def update_note_view(request: WSGIRequest, note_uuid):
 def user_notes_view(request: WSGIRequest, username):
     user = User.objects.get(username=username)
     user_notes = Note.objects.filter(user=user)
-    print(username)
+    # print(username)
     return render(request, 'note/user_notes.html', {"notes": user_notes, "username": username})
 
 
@@ -197,7 +197,7 @@ def filter_notes_view(request: WSGIRequest):
     # ("posts_note"."title" LIKE %python% ESCAPE '\' OR "posts_note"."content" LIKE %python% ESCAPE '\')
     # ORDER BY "posts_note"."created_at" DESC
 
-    print(notes_queryset.query)
+    # print(notes_queryset.query)
 
     context: dict = {
         "notes": notes_queryset[:20],
@@ -208,11 +208,15 @@ def filter_notes_view(request: WSGIRequest):
 
 def show_tags_view(request):
     all_tags = Tag.objects.all().order_by('name')
-    # получим все курсы студента
-    # courses = Student.objects.get(name="Tom").courses.all()
-    tags_ss = Note.objects.all().values_list()
-    print(tags_ss)
     context: dict = {
         "tags": all_tags,
     }
     return render(request, "note/tags.html", context)
+
+
+# заметки выбранного тега
+def tag_notes_view(request: WSGIRequest, tag):
+    tag_notes = Note.objects.filter(tags__name=tag).order_by("-created_at")
+    # print(tag)
+    # print(tag_notes)
+    return render(request, 'note/tag_notes.html', {"notes": tag_notes, "tag": tag})
