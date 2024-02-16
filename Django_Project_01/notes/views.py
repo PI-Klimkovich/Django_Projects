@@ -81,12 +81,15 @@ def create_note_view(request: WSGIRequest):
 
 def show_note_view(request: WSGIRequest, note_uuid):
     try:
-        note = Note.objects.get(uuid=note_uuid)  # Получение только ОДНОЙ записи.
+        note = Note.objects.get(uuid=note_uuid)  #
+        # courses = Student.objects.get(name="Tom").courses.all()
+        tags = Note.objects.get(uuid=note_uuid).tags.all()
+        print(tags)
     except Note.DoesNotExist:
         # Если не найдено такой записи.
         raise Http404
 
-    return render(request, "note/note.html", {"note": note})
+    return render(request, "note/note.html", {"note": note, "tags": tags})
 
 
 @login_required

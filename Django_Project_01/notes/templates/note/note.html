@@ -25,6 +25,17 @@
         <div>{{ note.content | safe | linebreaks }}</div>
         <p><b>Автор: {{ note.user }}</b></p>
 
+        {% if tags|length > 0 %}
+          <div class="d-flex align-items-center py-1">
+            <b class="me-2">Теги:</b>
+            {% for tag in tags %}
+                 <a class="nav-link badge text-bg-primary me-2" href="{% url 'tag_notes' tag %}">{{ tag }}</a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="badge text-bg-info me-2">Заметка без тегов</p>
+        {% endif %}
+
     {% if user.is_authenticated and note.user.username == user.username or user.is_anonymous and note.user.username == None %}
 
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
