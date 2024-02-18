@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.db.models import Q
-from django.db.models import Count
+from django.db.models import Q, Count, Value, Subquery, OuterRef
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.handlers.wsgi import WSGIRequest
 from django.contrib.auth.decorators import login_required
 
 from .models import User
-from notes.models import Tag
+from notes.models import Tag, GroupConcat
+# from .models import Note
 
 
 def register(request: WSGIRequest):
@@ -62,10 +62,22 @@ def about_registration(request):
 
 
 def show_user_view(request):
-    all_users = (User.objects.annotate(notes_num=Count('note__user'))
-          .values("username", "last_login", "country", "notes_num")
-          .order_by('username'))
-    # print(all_users)
+    all_users = (User.objects
+                 .annotate(notes_num=Count('note__user'))
+                 .values("username", "last_login", "country", "notes_num")
+                 .order_by('username'))
+
+    # all_users = (User.objects
+    #              .annotate(notes_num=Count('note__user'),
+    #                        tag_names=Subquery(
+    #                            Tag.objects.filter(notes=OuterRef('pk')).values('notes')
+    #                            .annotate(names=GroupConcat('name', Value(' '), distinct=True))
+    #                            .values('names')[:1]
+    #                        )
+    #                        )
+    #              .values("username", "last_login", "country", "notes_num")
+    #              .order_by('username'))
+    print(all_users)
     context: dict = {
         "users": all_users,
     }

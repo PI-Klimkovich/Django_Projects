@@ -14,7 +14,8 @@
       {% for user in users %}
         <div class="alert alert-info">
           <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 mb-md-0">
-            <li class="col-lg-3">
+
+            <li class="col-lg-2">
               <h4 class="mb-0"><a class="nav-link px-2 link-body-emphasis">{{ user.username }}</a></h4>
               {% if user.country %}
                 <a class="nav-link px-2 link-body-emphasis">Локация: {{ user.country.upper }}</a>
@@ -22,10 +23,11 @@
                 <a class="nav-link px-2 link-body-emphasis">Локация: не указана</a>
               {% endif %}
             </li>
+
             <li>
               <a class="nav-link link-body-emphasis"><b>Активность:</b></a>
             </li>
-            <li>
+            <li class="col-lg-4">
               {% if user.last_login %}
                 <a class="nav-link link-body-emphasis" href="{% url 'user_notes' user.username %}"><p class="col-md-auto mb-0">- <i>Заметок:</i> {{ user.notes_num }}</p></a>
                 <a class="nav-link link-body-emphasis"><p class="col-md-auto mb-0">- <i>Последний визит:</i> {{ user.last_login }}</p></a>
@@ -33,6 +35,18 @@
                 <a class="nav-link link-body-emphasis"><p class="col-md-auto mb-0">- <i>К сожалению, не активен!</i></p></a>
               {% endif %}
             </li>
+
+            <li>
+              <a class="nav-link link-body-emphasis"><b>Теги:</b></a>
+            </li>
+            <li>
+              {% if user.last_login %}
+                <a class="nav-link link-body-emphasis"><p class="col-md-auto mb-0">- <i>Заметок:</i> {{ user.notes_num }}</p></a>
+              {% else %}
+                <a class="nav-link link-body-emphasis"><p class="col-md-auto mb-0">- <i>К сожалению, не активен!</i></p></a>
+              {% endif %}
+            </li>
+
           </ul>
         </div>
       {% endfor %}

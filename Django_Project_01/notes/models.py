@@ -1,6 +1,12 @@
 import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.db.models import Func
+
+
+class GroupConcat(Func):
+    function = 'GROUP_CONCAT'
+    template = '%(function)s(%(expressions)s)'
 
 
 class Tag(models.Model):

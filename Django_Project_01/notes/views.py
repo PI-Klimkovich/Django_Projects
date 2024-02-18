@@ -5,12 +5,14 @@ from django.http import HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.conf import settings
-from django.db.models import Q, F
+from django.db.models import Q, F, Value, Subquery, OuterRef
+# from django.db.models import CharField, Func
+# from django.db.models.functions import Concat
 
 import os
 import shutil
 
-from .models import Note, Tag
+from .models import Note, Tag, GroupConcat
 from user.models import User
 
 
@@ -18,24 +20,33 @@ def home_page_view(request):
     # all_notes = Note.objects.all()  # Получение всех записей из таблицы этой модели.
     all_notes = (Note.objects.all()
                  .select_related("user")  # Вытягивание связанных данных из таблицы User в один запрос
-                 .prefetch_related("tags")  # Вытягивание связанных данных из таблицы Tag в отдельные запросы
+                 # .prefetch_related("tags")  # Вытягивание связанных данных из таблицы Tag в отдельные запросы
                  .annotate(
                      # Создание нового вычисляемого поля username из связанной таблицы User
                      username=F('user__username'),
 
                      # courses=Course.objects.filter(id__in=course_ids)
                      # student.courses.set(courses, through_defaults={"date": date.today(), "mark":0})
+                     # ingredients_list=Concat('ingredients__name', Value(','), distinct=True, output_field=CharField())
 
                      # Создание массива уникальных имен тегов для каждой заметки
                      # tag_names=ArrayAgg('tags__name', distinct=True)
+                     # tag_names=Concat('tags__name', Value(' '), distinct=True, output_field=CharField())
+                     tag_names=Subquery(
+                         Tag.objects.filter(notes=OuterRef('pk')).values('notes')
+                         .annotate(names=GroupConcat('name', Value(' '), distinct=True))
+                         .values('names')[:1]
+                     )
                  )
-                 # .values("uuid", "title", "created_at", "user", "tags")  # Выбор только указанных полей
+                 # .values("uuid", "title", "anons", "created_at", "user", "tag_names")  # Выбор только указанных полей
                  .distinct()  # Убирание дубликатов, если они есть
                  .order_by("-created_at")  # Сортировка результатов по убыванию по полю created_at
                  )
 
-    queryset = Tag.objects.all().order_by().values_list()
     # print(all_notes.values_list())
+    # print()
+    # queryset = Tag.objects.all().order_by("name")
+    # print(queryset)
     context: dict = {
         "notes": all_notes[:20]
     }
@@ -82,7 +93,6 @@ def create_note_view(request: WSGIRequest):
 def show_note_view(request: WSGIRequest, note_uuid):
     try:
         note = Note.objects.get(uuid=note_uuid)  #
-        # courses = Student.objects.get(name="Tom").courses.all()
         tags = Note.objects.get(uuid=note_uuid).tags.all()
         print(tags)
     except Note.DoesNotExist:
@@ -94,7 +104,7 @@ def show_note_view(request: WSGIRequest, note_uuid):
 
 @login_required
 def delete_note_view(request: WSGIRequest, note_uuid: str):
-    note = get_object_or_404(Note, id=note_uuid)
+    note = get_object_or_404(Note, uuid=note_uuid)
     if note.user != request.user:
         return HttpResponseForbidden("У Вас нет разрешения на удаление объекта")
 
@@ -109,7 +119,7 @@ def delete_note_view(request: WSGIRequest, note_uuid: str):
 
 @login_required
 def update_note_view(request: WSGIRequest, note_uuid):
-    note = get_object_or_404(Note, id=note_uuid)
+    note = get_object_or_404(Note, uuid=note_uuid)
     if note.user != request.user:
         return HttpResponseForbidden("У Вас нет разрешения на редактирование объекта")
 
@@ -137,7 +147,16 @@ def update_note_view(request: WSGIRequest, note_uuid):
 # заметки выбранного пользователя
 def user_notes_view(request: WSGIRequest, username):
     user = User.objects.get(username=username)
-    user_notes = Note.objects.filter(user=user)
+    user_notes = (Note.objects.filter(user=user)
+                  .annotate(
+                            tag_names=Subquery(
+                                Tag.objects.filter(notes=OuterRef('pk')).values('notes')
+                                .annotate(names=GroupConcat('name', Value(' '), distinct=True))
+                                .values('names')[:1]
+                            )
+                  )
+                  .order_by("-created_at")
+                  )
     # print(username)
     return render(request, 'note/user_notes.html', {"notes": user_notes, "username": username})
 
@@ -146,7 +165,16 @@ def user_notes_view(request: WSGIRequest, username):
 @login_required()
 def your_notes_view(request: WSGIRequest, username):
     user = User.objects.get(username=username)
-    user_notes = Note.objects.filter(user=user)
+    user_notes = (Note.objects.filter(user=user)
+                  .annotate(
+                      tag_names=Subquery(
+                          Tag.objects.filter(notes=OuterRef('pk')).values('notes')
+                          .annotate(names=GroupConcat('name', Value(' '), distinct=True))
+                          .values('names')[:1]
+                      )
+                  )
+                  .order_by("-created_at")
+                  )
     # print(username)
     return render(request, 'note/your_notes.html', {"notes": user_notes, "username": username})
 

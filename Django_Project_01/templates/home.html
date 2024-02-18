@@ -62,16 +62,18 @@
           {{ note.created_at }}
         </p>
 
-        <div>
+        <div class="card-text my-3">Теги:
           {# Если у заметки нет тегов, то все равно будет список, в котором имеется лишь один None, не учитываем такое #}
-          {% if note.tag_names.0 != None %}
-            {% for tag in note.tag_names %}
-              <span class="me-2 badge text-bg-primary">{{ tag }}</span>
+          {% if note.tag_names != Nane %}
+            {% for tag in note.tag_names.split %}
+              <a class="nav-link badge text-bg-primary me-2" href="{% url 'tag_notes' tag %}">{{ tag }}</a>
             {% endfor %}
+          {% else %}
+            <p class="badge text-bg-info me-2">Заметка без тегов</p>
           {% endif %}
         </div>
 
-        <p>Автор:
+        <p class="card-text my-3">Автор:
           <a class="text-dark text-decoration-none" href="{% url 'user_notes' note.user %}">{{ note.user }}</a>
         </p>
       </div>

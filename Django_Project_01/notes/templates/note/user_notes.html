@@ -33,6 +33,18 @@
             </svg>
             {{ note.created_at }}
           </p>
+
+          <div class="card-text my-3">Теги:
+            {# Если у заметки нет тегов, то все равно будет список, в котором имеется лишь один None, не учитываем такое #}
+            {% if note.tag_names != Nane %}
+              {% for tag in note.tag_names.split %}
+                <a class="nav-link badge text-bg-primary me-2" href="{% url 'tag_notes' tag %}">{{ tag }}</a>
+              {% endfor %}
+            {% else %}
+              <p class="badge text-bg-info me-2">Заметка без тегов</p>
+            {% endif %}
+          </div>
+
         </div>
       {% endfor %}
     {% else %}
