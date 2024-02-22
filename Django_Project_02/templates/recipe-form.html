@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Создание рецепта{% endblock %}
+
+{% block links %}
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{{ form.media }}
+{% endblock %}
+
+{% block content %}
+
+	<div class="container py-5">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for field in form %}
+            	<div class="mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    <div class="text-muted">{{ field.help_text }}</div>
+                    {% if field.errors %}
+                    	<div class="alert alert-danger">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">Создать</button>
+        </form>
+    </div>
+{% endblock %}
