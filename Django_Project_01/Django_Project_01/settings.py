@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'notes.apps.NotesConfig',
     'user',
     'debug_toolbar',
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = "user.User"

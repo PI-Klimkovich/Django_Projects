@@ -39,11 +39,11 @@
             <li>
               <a class="nav-link link-body-emphasis"><b>Теги:</b></a>
             </li>
-            <li>
-              {% if user.last_login %}
+            <li class="col-lg-4">
+              {% if user.tag_names != Nane %}
                 <a class="nav-link link-body-emphasis"><p class="col-md-auto mb-0">- <i>Заметок:</i> {{ user.notes_num }}</p></a>
               {% else %}
-                <a class="nav-link link-body-emphasis"><p class="col-md-auto mb-0">- <i>К сожалению, не активен!</i></p></a>
+                <p class="badge text-bg-info me-2">Заметки без тегов</p>
               {% endif %}
             </li>
 

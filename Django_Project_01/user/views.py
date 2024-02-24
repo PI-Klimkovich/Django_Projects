@@ -62,21 +62,22 @@ def about_registration(request):
 
 
 def show_user_view(request):
-    all_users = (User.objects
-                 .annotate(notes_num=Count('note__user'))
-                 .values("username", "last_login", "country", "notes_num")
-                 .order_by('username'))
-
     # all_users = (User.objects
-    #              .annotate(notes_num=Count('note__user'),
-    #                        tag_names=Subquery(
-    #                            Tag.objects.filter(notes=OuterRef('pk')).values('notes')
-    #                            .annotate(names=GroupConcat('name', Value(' '), distinct=True))
-    #                            .values('names')[:1]
-    #                        )
-    #                        )
+    #              .annotate(notes_num=Count('note__user'))
     #              .values("username", "last_login", "country", "notes_num")
     #              .order_by('username'))
+
+    all_users = (User.objects
+                 .annotate(notes_num=Count('note__user'),
+                           # tags_list=GroupConcat('note__tags__name', Value(" "), distinct=True),
+                           tag_names=Subquery(
+                               Tag.objects.filter(notes=OuterRef('pk')).values('notes')
+                               .annotate(names=GroupConcat('name', Value(' '), distinct=True))
+                               .values('names')[:1]
+                           )
+                           )
+                 .values("username", "last_login", "country", "notes_num", "tag_names")
+                 .order_by('username'))
     print(all_users)
     context: dict = {
         "users": all_users,
