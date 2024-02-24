@@ -9,5 +9,4 @@ urlpatterns = [
     path('<uuid:pk>/', NoteDetailAPIView.as_view(), name='note-detail'),
     path('tags/', TagListCreateAPIViews.as_view(), name='tags'),
     path('users/', UserListCreateAPIViews.as_view(), name='users'),
-
 ]
